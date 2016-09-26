@@ -127,6 +127,10 @@ void mm(matrix a, matrix b, matrix result)
  */
 __global__ void mm_kernel(matrix a, matrix b, matrix result, int size)
 {	
+	time_t t;
+   	time(&t);
+	printf("blockIdx = %d,%d, threadIdx = %d,%d, blockDim = %d,%d, current time = %s\n", blockIdx.x, blockIdx.y, threadIdx.x, threadIdx.y, blockDim.x, blockDim.y, ctime(&t));
+	
 	int i = blockIdx.x * blockDim.x + threadIdx.x; 
 	int j = blockIdx.y * blockDim.y + threadIdx.y;
 	int k;
@@ -137,7 +141,9 @@ __global__ void mm_kernel(matrix a, matrix b, matrix result, int size)
 	for(k = 0; k < size; k++)
 		result.element[i][j] += a.element[i][k] * b.element[k][j];
 	
-	printf("blockIdx = %d,%d, threadIdx = %d,%d, blockDim = %d,%d\n", blockIdx.x, blockIdx.y, threadIdx.x, threadIdx.y, blockDim.x, blockDim.y);
+	
+   	time(&t);
+	printf("blockIdx = %d,%d, threadIdx = %d,%d, blockDim = %d,%d, current time = %s\n", blockIdx.x, blockIdx.y, threadIdx.x, threadIdx.y, blockDim.x, blockDim.y, ctime(&t));
 }
 
 void print_matrix(matrix m)
@@ -222,12 +228,7 @@ void work()
 
 
 int main(int argc, char ** argv)
-{
-	// Testing to see if can print current time
-	time_t t;
-   	time(&t);
-   	printf("current time is : %s\n",ctime(&t));
-	
+{	
 	srand(0); 
 
 	printf("Usage: %s <size>\n", argv[0]);

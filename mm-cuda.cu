@@ -127,6 +127,9 @@ void mm(matrix a, matrix b, matrix result)
  */
 __global__ void mm_kernel(matrix a, matrix b, matrix result, int size)
 {
+	long long before, after;
+	before = wall_clock_time();
+	
 	int i = blockIdx.x * blockDim.x + threadIdx.x; 
 	int j = blockIdx.y * blockDim.y + threadIdx.y;
 	int k;
@@ -136,6 +139,9 @@ __global__ void mm_kernel(matrix a, matrix b, matrix result, int size)
 
 	for(k = 0; k < size; k++)
 		result.element[i][j] += a.element[i][k] * b.element[k][j];
+	
+	after = wall_clock_time();
+	printf("blockIdx = %d,%d, threadIdx = %d,%d, blockDim = %d,%d, time taken = %1.2f secs\n", blockIdx.x, blockIdx.y, threadIdx.x, threadIdx.y, blockDim.x, blockDim.y, ((float)(after - before))/1000000000);
 }
 
 void print_matrix(matrix m)
@@ -156,7 +162,7 @@ void print_matrix(matrix m)
 void work()
 {
 	matrix a, b, result1, result2;
-	long long before, after, middle;
+	long long before, after;
 	int correct, i, j, dim;
 	cudaError_t rc;
 
@@ -182,11 +188,9 @@ void work()
 	dim3 grid(dim, dim);	// a grid of CUDA thread blocks
 	before = wall_clock_time();
 	mm_kernel<<<grid, block>>>(a, b, result2, size);
-	middle = wall_clock_time();
 	cudaDeviceSynchronize();
 	after = wall_clock_time();
 	fprintf(stderr, "Matrix multiplication on GPU took %1.2f seconds\n", ((float)(after - before))/1000000000);
-	fprintf(stderr, "Synchronization took %1.2f seconds\n", ((float)(after - middle))/1000000000);
 
 	// was there any error?
         rc = cudaGetLastError();

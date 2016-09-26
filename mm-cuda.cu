@@ -223,7 +223,8 @@ void work()
 
 int main(int argc, char ** argv)
 {
-	printf(ctime(&time(NULL))); // Testing to see if can print current time
+	time_t mytime = time(NULL);
+	printf(ctime(&mytime)); // Testing to see if can print current time
 	
 	srand(0); 
 

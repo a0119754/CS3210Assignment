@@ -190,15 +190,21 @@ void work()
         rc = cudaGetLastError();
         if (rc != cudaSuccess)
                 printf("Last CUDA error %s\n", cudaGetErrorString(rc));
+	
+	printf("Starting to compare the two result matrices\n");
 
 	// Compare the results
 	correct = 1;
-	for (i = 0; correct && i < size; i++)
-		for (j = 0; j < size; j++)
+	for (i = 0; correct && i < size; i++) {
+		for (j = 0; j < size; j++) {
 			if (result1.element[i][j] != result2.element[i][j]) {
 				correct = 0;
 				break;
 			}
+		}
+		printf("%d ", i);
+	}
+	printf("\n");
 
 	if (correct)
 		printf("The result matrices are identical!\n");

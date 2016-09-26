@@ -223,8 +223,10 @@ void work()
 
 int main(int argc, char ** argv)
 {
-	time_t mytime = time(NULL);
-	printf(ctime(&mytime)); // Testing to see if can print current time
+	// Testing to see if can print current time
+	time_t t;
+   	time(&t);
+   	printf("current time is : %s\n",ctime(&t));
 	
 	srand(0); 
 

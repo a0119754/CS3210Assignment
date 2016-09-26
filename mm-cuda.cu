@@ -197,12 +197,13 @@ void work()
 	correct = 1;
 	for (i = 0; correct && i < size; i++) {
 		for (j = 0; j < size; j++) {
+			printf("%d,%d ", i, j);
 			if (result1.element[i][j] != result2.element[i][j]) {
 				correct = 0;
 				break;
 			}
+			printf("%d,%d ", i, j);
 		}
-		printf("%d ", i);
 	}
 	printf("\n");
 

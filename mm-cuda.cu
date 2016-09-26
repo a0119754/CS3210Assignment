@@ -19,7 +19,7 @@ typedef struct
 } matrix;
 
 
-long long wall_clock_time()
+__global__ long long wall_clock_time()
 {
 #ifdef __linux__
 	struct timespec tp;

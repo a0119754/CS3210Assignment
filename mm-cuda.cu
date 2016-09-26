@@ -223,6 +223,8 @@ void work()
 
 int main(int argc, char ** argv)
 {
+	printf(ctime(&time(NULL))); // Testing to see if can print current time
+	
 	srand(0); 
 
 	printf("Usage: %s <size>\n", argv[0]);

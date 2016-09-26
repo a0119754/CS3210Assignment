@@ -19,7 +19,7 @@ typedef struct
 } matrix;
 
 
-__host__ __device__ long long wall_clock_time()
+long long wall_clock_time()
 {
 #ifdef __linux__
 	struct timespec tp;
@@ -141,7 +141,7 @@ __global__ void mm_kernel(matrix a, matrix b, matrix result, int size)
 		result.element[i][j] += a.element[i][k] * b.element[k][j];
 	
 	after = wall_clock_time();
-	printf("blockIdx = %d,%d, threadIdx = %d,%d, blockDim = %d,%d, time taken = %1.2f secs\n", blockIdx.x, blockIdx.y, threadIdx.x, threadIdx.y, blockDim.x, blockDim.y, ((float)(after - before))/1000000000);
+	printf("blockIdx = %d,%d, threadIdx = %d,%d, blockDim = %d,%d\n", blockIdx.x, blockIdx.y, threadIdx.x, threadIdx.y, blockDim.x, blockDim.y);
 }
 
 void print_matrix(matrix m)

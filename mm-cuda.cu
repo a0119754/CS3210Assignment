@@ -156,7 +156,7 @@ void print_matrix(matrix m)
 void work()
 {
 	matrix a, b, result1, result2;
-	long long before, after;
+	long long before, after, middle;
 	int correct, i, j, dim;
 	cudaError_t rc;
 
@@ -182,9 +182,11 @@ void work()
 	dim3 grid(dim, dim);	// a grid of CUDA thread blocks
 	before = wall_clock_time();
 	mm_kernel<<<grid, block>>>(a, b, result2, size);
+	middle = wall_clock_time();
 	cudaDeviceSynchronize();
 	after = wall_clock_time();
 	fprintf(stderr, "Matrix multiplication on GPU took %1.2f seconds\n", ((float)(after - before))/1000000000);
+	fprintf(stderr, "Synchronization took %1.2f seconds\n", ((float)(after - middle))/1000000000);
 
 	// was there any error?
         rc = cudaGetLastError();

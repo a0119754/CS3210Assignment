@@ -157,7 +157,7 @@ void print_matrix(matrix m)
 void transpose(matrix b, matrix bTransposed) {
 	for (int i = 0; i < size; i++) {
 		for (int j = 0; j < size; j++) {
-			b.element[j][i] = b.element[i][j];
+			bTransposed.element[j][i] = b.element[i][j];
 		}
 	}
 }

@@ -179,7 +179,7 @@ void work()
 	// Perform CUDA matrix  multiplication
 	dim3 block(32, 32, 32);			// a block of 32 x 32 CUDA threads
 	dim = (size % 32 == 0) ? size / 32 : size / 32 + 1; 
-	dim3 grid(dim, dim, dim);	// a grid of CUDA thread blocks
+	dim3 grid(dim, dim);	// a grid of CUDA thread blocks
 	before = wall_clock_time();
 	mm_kernel<<<grid, block>>>(a, b, result2, size);
 	cudaDeviceSynchronize();

@@ -136,7 +136,8 @@ __global__ void mm_kernel(matrix a, matrix b, matrix result, int size)
 
 	float results = 0;
 	for(k = 0; k < size; k++)
-		results += a.element[i][k] * b.element[k][j];
+		results += a.element[i][k] * b.element[j][k]; 
+	// We have transposed matrix b beforehand - row retrieval is faster with less cache thrashing
 	result.element[i][j] = results;
 }
 
@@ -153,11 +154,17 @@ void print_matrix(matrix m)
 	}
 }
 
-
+void transpose(matrix b, matrix bTransposed) {
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
+			b.element[j][i] = b.element[i][j];
+		}
+	}
+}
 
 void work()
 {
-	matrix a, b, result1, result2;
+	matrix a, b, bTransposed, result1, result2;
 	long long before, after;
 	int correct, i, j, dim;
 	cudaError_t rc;
@@ -165,6 +172,7 @@ void work()
 	// Allocate memory for matrices
 	allocate_matrix(&a);
 	allocate_matrix(&b);
+	allocate_matrix(&bTransposed);
 	allocate_matrix(&result1);
 	allocate_matrix(&result2);	
 
@@ -183,7 +191,8 @@ void work()
 	dim = (size % 32 == 0) ? size / 32 : size / 32 + 1; 
 	dim3 grid(dim, dim);	// a grid of CUDA thread blocks
 	before = wall_clock_time();
-	mm_kernel<<<grid, block>>>(a, b, result2, size);
+	transpose(b, bTransposed); // tranpose matrix B
+	mm_kernel<<<grid, block>>>(a, bTransposed, result2, size);
 	cudaDeviceSynchronize();
 	after = wall_clock_time();
 	fprintf(stderr, "Matrix multiplication on GPU took %1.2f seconds\n", ((float)(after - before))/1000000000);
